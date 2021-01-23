@@ -9,7 +9,6 @@ st.write("""
 Data del portal de Datos abiertos de la Municipalidad de Lima
 """)
 
-aves = pd.read_csv('aves.csv')
 num_especies = pd.read_csv('numero-especies.csv')
 total_aves = pd.read_csv('total_aves_por_zona_por_mes.csv')  
 
@@ -72,21 +71,3 @@ st.pyplot(fig2)
 
 import streamlit.components.v1 as components
 components.iframe("https://bitsviajeros.com/mapas/pantanos/",height=600)
-
-# VISITANTES A PANTANOS DE VILLA 2019
-
-# visitantes = pd.read_csv('Visitantes-2019.csv')
-
-# visitantes.set_index('MES', inplace= True)
-
-# visitantes_tipo = visitantes.T
-
-# visitantes_tipo.loc['Visitantes_por_mes']= visitantes_tipo.sum()
-
-# visitantes_tipo['Total_año'] = visitantes_tipo.sum(axis=1)
-
-# visitantes_tipo.columns
-
-# visitantes_totalmes =visitantes_tipo.iloc[6:,:]
-
-# visitantes_totalmes
