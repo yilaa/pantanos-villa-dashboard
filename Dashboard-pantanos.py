@@ -2,7 +2,6 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 
 st.write("""
