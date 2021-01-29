@@ -18,11 +18,16 @@ Diseñado por:
 **Indira Palomino**  ''')  
 
 #Preparación de data
-aves = pd.read_csv('aves.csv')
-total_aves = aves.groupby(['mes','año']).sum()
-total_aves.reset_index(inplace=True)
-numero_especies = aves.groupby(['mes','año']).count()
-numero_especies.reset_index(inplace=True)
+st.cache(persist=True)
+def load_data():
+  aves = pd.read_csv('aves.csv')
+  total_aves = aves.groupby(['mes','año']).sum()
+  total_aves.reset_index(inplace=True)
+  numero_especies = aves.groupby(['mes','año']).count()
+  numero_especies.reset_index(inplace=True)
+  return aves, total_aves, numero_especies
+
+aves, total_aves, numero_especies = load_data()
 
 """
 ## Total de aves por mes (2019 y 2020) con altair"""
@@ -68,6 +73,27 @@ Status = alt.Chart(aves_status).mark_bar().encode(
 
 st.altair_chart(Status)
 
+"""
+## Busca tu ave y mira su monitoreo """
+listaAves = sorted(aves['NOMBRE COMUN'].unique())
+select_aves = st.selectbox('Selecciona Ave', listaAves)
+#st.checkbox("Mostrar gráfico", False, key=1)
+
+grafico = alt.Chart(aves[aves['NOMBRE COMUN']== select_aves]).mark_line(point=True).encode(
+  x=alt.X('mes:O', sort = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+  "JULIO", "AGOSTO", "SETIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"],
+  axis=alt.Axis(title='Mes')),
+  y='TOTALES',
+  color=alt.Color('año:O', scale=alt.Scale(range=['#fcba03', '#fc3103'])),
+  tooltip = ['TOTALES','año', 'mes']
+)
+if st.checkbox('Mostrar gráfico', True, key=1):
+  st.markdown("### Monitoreo de %s " % (select_aves))
+  st.altair_chart(grafico, use_container_width=True)
+
+
+"""
+## Mapa de Aves por zonas"""
 import streamlit.components.v1 as components
 components.iframe("https://bitsviajeros.com/mapas/pantanos/",height=700)
 
